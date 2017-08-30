@@ -65,7 +65,6 @@ public class SeckillServiceImpl implements SeckillService {
                 redisDao.putSeckill(seckill);
             }
         }
-
         Date startTime = seckill.getStartTime();
         Date endTime = seckill.getEndTime();
 
@@ -137,7 +136,6 @@ public class SeckillServiceImpl implements SeckillService {
     }
 
 
-    @Override
     public SeckillExecution executeSeckillProcedure(long seckillId, long userPhone, String md5) {
         if (md5 == null || !md5.equals(getMD5(seckillId))) {
             return new SeckillExecution(seckillId, SeckillStateEnum.DATA_REWRITE);
@@ -162,6 +160,7 @@ public class SeckillServiceImpl implements SeckillService {
             }
         } catch (Exception e) {
             LOG.error(e.getMessage(), e);
+            System.out.println(e.getMessage());
             return new SeckillExecution(seckillId, SeckillStateEnum.INNER_ERROR);
         }
     }

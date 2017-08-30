@@ -31,6 +31,8 @@ public class SeckillController {
     @Autowired
     private SeckillService seckillService;
 
+    private static int times =0;
+
     @RequestMapping(value = "list",method = RequestMethod.GET)
     public String list(Model model){
         model.addAttribute("list",seckillService.getSeckillList());
@@ -61,6 +63,8 @@ public class SeckillController {
             LOG.error(e.getMessage(),e);
             result = new SeckillResult<Exposer>(false,e.getMessage());
         }
+
+        System.out.println(++times+"----"+System.currentTimeMillis());
         return result;
     }
 
@@ -71,14 +75,14 @@ public class SeckillController {
      * @param md5 秒杀Key
      * @return
      */
-    @RequestMapping(value = "{seckillId}/{md5}/execution",method = RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
+    @RequestMapping(value = "{seckillId}/{md5}/execution/{userPhone}",method = RequestMethod.POST,produces = {"application/json;charset=UTF-8"})
     @ResponseBody
     public SeckillResult<SeckillExecution> execute(@PathVariable("seckillId")Long seckillId,
-                                                   @CookieValue(value = "userPhone",required = false)Long userPhone,
+                                                   @PathVariable(value = "userPhone")Long userPhone,
                                                    @PathVariable("md5")String md5){
         SeckillResult<SeckillExecution> result;
         SeckillExecution seckillExecution;
-
+        System.out.println("in execution: "+times++);
         if (userPhone == null){
             result = new SeckillResult<SeckillExecution>(false,"未注册");
         }else {
